@@ -1,219 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<style>
-		#formButton
-		{
-			height:25px;
-			width:75px;
-			background: green;			
-		}
-		#form1
-		{
-			height:100px;
-			width:200px;
-			background:#ffd7ce;
-			transform:translate(5em,-1.5em);
-		}
-		#hour
-		{
-			width:50px;
-		}
-		#display
-		{
-				position: relative;
-				background: #66FF66;
-				width:150px;
-				padding:10px;
-				
-		}
-		@media screen and (orientation:landscape)
-		{
-			
-			#display
+	<head>
+		<script src="cordova.js"></script> <!-- file will be added at compilation -->
+		<script>
+			function pageLoaded()
 			{
-				transform:translate(18em,-7.5em);
+				document.addEventListener("deviceready",phoneReady,false);
 			}
-		}
-		#errmsg
-		{
-			color: red;
-		}
-		
-	</style>
-	<script src="jquery-2.1.4.js"></script>
-	<script src="jquery-ui.js"></script>
-	<link rel = "stylesheet" href = "scripts/jquery-ui.css" type="text/css"/>
-	<script>
-	var str1 = "Supervisor";
-	var str2 = "Manager";
-	$(document).ready(function()
-	{
-		$("#form1").hide();
-		$("#display").hide();
-		$("#formButton").click(function()
-		{
-			$("#form1").toggle("slow");
-			
-		});
-		$("#submit").click(function(){
-			$("#display").toggle("slow");
-		});
-		$("#box").hide();
-		$("#position").change(function()
-		{
-			var regex = new RegExp('^'+$("#position").val()+'$',"i");
-			if(regex.test(str1) || regex.test(str2) )
+			function phoneReady()
 			{
-				$("#box").show();
+				//letak anything yang nak buat
 			}
-			if(regex.test("Staff"))
+			function initCamera()
 			{
-				$("#box").hide();
+				navigator.camera.getPicture(onSuccess,onFail,{quality:80});
 			}
-		});
-		  $("#hour").keypress(function (e) 
-		{
-			
-			if (e.which < 48 || e.which > 57) 
+			function onSuccess(imageURL)
 			{
-				$("#errmsg").html("Digits Only").show().fadeOut("slow");
-				return false;
+				document.getElementById("pic").src="data:image/jpeg;base64,"+imageURL;
 			}
-		});
-		
-	});
-	</script>
-</head>
-<body>
-	<div id = "formButton">Form</div>
-	<div id = "form1"> 
-	<form>
-	 Hours: <input type = "text" id = "hour" /><span id="errmsg"></span> <br/>
-	 Position: <select id="position" >
-			  <option value = "" style="display:none;"></option>
-			  <option value = "staff">Staff</option>
-			  <option value = "supervisor">Supervisor</option>
-		      <option value = "manager">Manager</option>
-			  </select><br/>
-			  <div id = "box"><input type="checkbox" id="tax" checked="">Tax Exemption</input></div>
-	<input type = "button" value = "Submit" onclick = "calc()" id="submit"/>
-	</form>
-	</div>
-	<div id="display"></div>
-<script>
-	function calc()
-	{
-		var hour = document.getElementById("hour").value;
-		var position = document.getElementById("position").value;
-		if(document.getElementById("tax").checked)
-		{
-			var tax1 = "on";
-		}
-		else
-		{
-			var tax1 = "off";
-		}
-	
-	if(position == "staff")
-	{
-		if(hour > 40)
-		{
-			 var ot = (hour-40) * 1.5;
-			 var salary = ot+(6.5*40);
-		}
-		else
-		{
-			var salary = 6.5*hour;
-		}
-	}
-	else if(position == "supervisor")
-	{
-		if( tax1 == "off")
-		{
-			if(hour > 40)
+			function onFail(message)
 			{
-				var ot = (hour-40)*1.5;
-				var salary1 = (7.5*40)+ot;
-				var tax = salary1 * 0.06;
-				var salary = salary1-tax;
+				//message= Reason for failure
 			}
-			else
-			{
-				var salary1 = 7.5*hour;
-				var tax = salary1 * 0.06;
-				var salary = salary1-tax;
-			}
-		}
-		else
-		{
-			if(hour > 40)
-			{
-				var ot = (hour-40)*1.5;
-				var salary = (7.5*40)+ot;
-				
-			}
-			else
-			{
-				var salary = 7.5*hour;
-				
-			}
-			
-		}
-	}
-	
-	else if(position == "manager")
-	{
-		if( tax1 == "off")
-		{
-			if(hour > 40)
-			{
-				var ot = (hour-40)*1.5;
-				var salary1 = (15*40)+ot;
-				var tax = salary1 * 0.06;
-				var salary = salary1-tax;
-			}
-			else
-			{
-				var salary1 = 15*hour;
-				var tax = salary1 * 0.06;
-				var salary = salary1-tax;
-			}
-		}
-		else
-		{
-			if(hour > 40)
-			{
-				var ot = (hour-40)*1.5;
-				var salary = (15*40)+ot;
-				
-			}
-			else
-			{
-				var salary = 15*hour;
-				
-			}
-			
-		}
-	}
-	
-	if(tax === undefined || tax === null)
-	{
-		var output = "Hours Worked: "+hour+"<br>"+"Position: "+position+"<br>"+"Salary(after): "+salary;
-		document.getElementById("display").innerHTML = output;
-		var output = "";
-	}
-	if(tax != 0)
-	{
-		var tax2 = tax.toFixed(2);
-		var output = "Hours Worked: "+hour+"<br>"+"Position: "+position+"<br/>"+"Tax value: "+tax2+"<br>"+"Salary(after): "+salary+"<br/>"+"salary(before); "+salary1;
-		document.getElementById("display").innerHTML = output;
-		var output = "";
-	}
-		
-		
-	}
-</script>
-
-</body>
+		</script>
+	</head>
+	<body onload="pageLoaded()">
+		<input type = "button" value = "Start Camera" onclick = "initCamera()"/>
+		<br/>
+		<img src="" id="pic" height="400px"/>
+	</body>
 </html>

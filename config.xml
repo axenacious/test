@@ -1,0 +1,14 @@
+<widget id="com.example.hello" version="0.0.1">
+        <name>New test app/name>
+        <description>
+            learning phonegapcan be fun
+        </description>
+        <author email="dev@callback.apache.org" href="http://phonegap.com">
+            Apache Cordova Team
+        </author>
+        <content src="index.html" />
+        <access origin="*" />
+		<icon src=""/>
+		<splash src=""/> 
+		<gap:plugin name="org.apache.cordova.camera" version="0.3.2" />
+    </widget>
